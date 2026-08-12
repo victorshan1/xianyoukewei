@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>乡村课堂AI助教 - 让教育更温暖</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+  <script src="js/echarts-helper.js"></script>
+</head>
+<body>
+  <!-- 背景装饰 - 渐变圆形 -->
+  <div class="bg-circle-orange"></div>
+  <div class="bg-circle-teal"></div>
+  <div class="bg-circle-purple"></div>
+  
+  <!-- 浮动装饰元素 -->
+  <div class="floating-decor d1">📚</div>
+  <div class="floating-decor d2">✏️</div>
+  <div class="floating-decor d3">🌟</div>
+  <div class="floating-decor d4">🎓</div>
+  
+  <!-- 顶部导航栏 -->
+  <header class="header">
+    <div class="header-content">
+      <div class="logo">
+        <i class="fas fa-sun"></i> 乡村课堂AI助教
+      </div>
+      <nav class="nav-tabs">
+        <button class="nav-tab active" data-port="teacher">
+          <i class="fas fa-chalkboard-teacher"></i> 教师端
+        </button>
+        <button class="nav-tab" data-port="student">
+          <i class="fas fa-user-graduate"></i> 学生端
+        </button>
+        <button class="nav-tab" data-port="parent">
+          <i class="fas fa-users"></i> 家长端
+        </button>
+      </nav>
+      <div class="header-actions">
+        <button class="settings-btn" id="settings-btn" title="设置">
+          <i class="fas fa-cog"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主内容区域 -->
+  <main class="main-content" id="main-content">
+    <!-- 动态加载页面内容 -->
+  </main>
+
+  <!-- 底部导航栏（移动端） -->
+  <nav class="bottom-nav" id="bottom-nav">
+    <button class="bottom-nav-item active" data-port="teacher" data-page="lesson-plan">
+      <i class="fas fa-book-open"></i>
+      <span>备课</span>
+    </button>
+    <button class="bottom-nav-item" data-port="teacher" data-page="student-profile">
+      <i class="fas fa-user-circle"></i>
+      <span>画像</span>
+    </button>
+    <button class="bottom-nav-item" data-port="student" data-page="photo-qa">
+      <i class="fas fa-camera"></i>
+      <span>答疑</span>
+    </button>
+    <button class="bottom-nav-item" data-port="student" data-page="practice">
+      <i class="fas fa-pen-fancy"></i>
+      <span>练习</span>
+    </button>
+    <button class="bottom-nav-item" data-port="parent" data-page="report">
+      <i class="fas fa-chart-line"></i>
+      <span>报告</span>
+    </button>
+  </nav>
+
+  <!-- 模态框容器 -->
+  <div id="modal-container"></div>
+
+  <!-- 核心脚本 -->
+  <script src="js/storage.js"></script>
+  <script src="js/demo-data.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/router.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- 页面脚本 -->
+  <script src="js/pages/lesson-plan.js"></script>
+  <script src="js/pages/student-profile.js"></script>
+  <script src="js/pages/class-overview.js"></script>
+  <script src="js/pages/photo-qa.js"></script>
+  <script src="js/pages/practice.js"></script>
+  <script src="js/pages/wrong-book.js"></script>
+  <script src="js/pages/report.js"></script>
+  <script src="js/pages/communication.js"></script>
+  <script src="js/pages/settings.js"></script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!-- 学生画像页面 -->
+<section id="student-profile-page" class="page-container port-teacher">
+  <div class="page-header-bg"></div>
+  <div class="page-header">
+    <div class="arc-decoration"></div>
+    <h1 class="page-title"><i class="fas fa-user-graduate"></i> 学生画像</h1>
+    <div class="classroom-decor">
+      <span>📊</span>
+      <span>看见每个孩子的独特光芒 ✨</span>
+      <span>👨‍🎓👩‍🎓👩‍🎓👨‍🎓</span>
+    </div>
+    <p class="page-subtitle"><span class="title-decoration left">🎯🔍</span>AI分析学生学习数据，生成个性化学习画像<span class="title-decoration right">📈💡</span></p>
+  </div>
+
+  <div class="profile-layout">
+    <!-- 学生列表区域 -->
+    <div class="card student-list-card">
+      <div class="card-header">
+        <h2 class="card-title"><i class="fas fa-users"></i> 学生列表</h2>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn btn-secondary btn-small" id="export-students-btn" title="导出学生数据"><i class="fas fa-download"></i> 导出</button>
+          <button class="btn btn-secondary btn-small" id="import-students-btn" title="导入学生数据"><i class="fas fa-upload"></i> 导入</button>
+          <button class="btn btn-primary btn-small" id="add-student-btn"><i class="fas fa-plus"></i> 添加</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="form-group">
+          <input type="text" class="form-input" id="student-search" placeholder="🔍 搜索学生姓名...">
+        </div>
+        <div id="student-list">
+          <div class="loading-container">
+            <p style="color: var(--text-tertiary);">加载中...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 画像展示区域 -->
+    <div class="card profile-detail-card">
+      <div class="card-header">
+        <h2 class="card-title" id="profile-student-name"><i class="fas fa-chart-radar"></i> 学生画像</h2>
+        <button class="btn btn-secondary btn-small" id="add-score-btn" style="display:none;"><i class="fas fa-plus-circle"></i> 录入成绩</button>
+      </div>
+      <div class="card-body">
+        <div id="profile-content">
+          <div class="chart-placeholder">
+            <div>
+              <p style="font-size: 48px; margin-bottom: var(--spacing-md);"><i class="fas fa-chart-pie" style="color: var(--teacher-color);"></i></p>
+              <p>请从左侧选择一位学生查看画像</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+.profile-layout {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: var(--spacing-lg);
+}
+.student-list-card {
+  max-height: calc(100vh - 180px);
+  overflow-y: auto;
+}
+.student-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition);
+  border-bottom: 1px solid var(--border-light);
+}
+.student-item:last-child { border-bottom: none; }
+.student-item:hover { background: var(--teacher-bg); }
+.student-item.active { background: var(--teacher-bg); border-left: 3px solid var(--teacher-color); }
+.student-info { flex: 1; }
+.student-name { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+.student-meta { font-size: 12px; color: var(--text-tertiary); }
+.student-actions { display: flex; gap: 4px; }
+.btn-icon {
+  background: transparent; border: none; cursor: pointer;
+  padding: 4px 8px; border-radius: var(--radius-sm);
+  font-size: 16px; transition: var(--transition);
+}
+.btn-icon:hover { background: var(--teacher-bg); }
+.profile-section { margin-bottom: 24px; }
+.section-title {
+  font-size: 15px; font-weight: 700; color: var(--text-primary);
+  margin-bottom: 12px; padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-light);
+}
+.radar-chart-container { display: flex; justify-content: center; padding: 16px 0; }
+#radar-chart { max-width: 100%; height: auto; }
+.attribution-list { display: flex; flex-direction: column; gap: 12px; }
+.attribution-item { display: flex; align-items: center; gap: 12px; }
+.attribution-label { width: 100px; font-size: 13px; color: var(--text-secondary); flex-shrink: 0; }
+.attribution-bar {
+  flex: 1; height: 20px; background: var(--bg-body);
+  border-radius: var(--radius-full); overflow: hidden;
+}
+.attribution-fill {
+  height: 100%; background: var(--teacher-gradient);
+  border-radius: var(--radius-full); transition: width 0.5s ease;
+}
+.attribution-value { width: 40px; font-size: 13px; font-weight: 600; color: var(--text-primary); text-align: right; }
+.suggestions-list { display: flex; flex-direction: column; gap: 8px; }
+@media (max-width: 768px) {
+  .profile-layout { grid-template-columns: 1fr; }
+  .student-list-card { max-height: none; }
+  .attribution-label { width: 80px; }
+}
+</style>
+
+<script src="../../js/pages/student-profile.js"></script>
+<script>
+  document.addEventListener('page-loaded', function(e) {
+    if (e.detail.route && e.detail.route.page === 'student-profile') {
+      setTimeout(function() {
+        if (App.Pages && App.Pages.StudentProfile) App.Pages.StudentProfile.init();
+      }, 100);
+    }
+  });
+  if (window.location.hash === '#/teacher/student-profile') {
+    setTimeout(function() {
+      if (App.Pages && App.Pages.StudentProfile) App.Pages.StudentProfile.init();
+    }, 500);
+  }
+</script>

@@ -1,0 +1,152 @@
+<!-- 针对性练习页面 -->
+<section id="practice-page" class="page-container port-student">
+  <div class="page-header-bg"></div>
+  <div class="page-header">
+    <div class="arc-decoration"></div>
+    <h1 class="page-title"><i class="fas fa-pen-fancy"></i> 针对性练习</h1>
+    <div class="classroom-decor">
+      <span>✏️</span>
+      <span>勤加练习，天天进步 💪</span>
+      <span>📝🧮📖🔬</span>
+    </div>
+    <p class="page-subtitle"><span class="title-decoration left">🎯📚</span>AI根据你的学习情况，智能推荐练习题<span class="title-decoration right">🏅✨</span></p>
+  </div>
+
+  <!-- 练习设置 -->
+  <div class="card">
+    <div class="card-header">
+      <h2 class="card-title"><i class="fas fa-cog"></i> 练习设置</h2>
+    </div>
+    <div class="card-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="practice-subject"><i class="fas fa-book"></i> 学科</label>
+          <select class="form-select" id="practice-subject" required>
+            <option value="">请选择学科</option>
+            <option value="语文">语文</option>
+            <option value="数学">数学</option>
+            <option value="英语">英语</option>
+            <option value="物理">物理</option>
+            <option value="化学">化学</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="practice-grade"><i class="fas fa-graduation-cap"></i> 年级</label>
+          <select class="form-select" id="practice-grade" required>
+            <option value="">请选择年级</option>
+            <option value="三年级">三年级</option>
+            <option value="四年级">四年级</option>
+            <option value="五年级">五年级</option>
+            <option value="六年级">六年级</option>
+            <option value="七年级">七年级</option>
+            <option value="八年级">八年级</option>
+            <option value="九年级">九年级</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="practice-difficulty"><i class="fas fa-signal"></i> 难度</label>
+          <select class="form-select" id="practice-difficulty">
+            <option value="easy">基础</option>
+            <option value="medium">中等</option>
+            <option value="hard">提高</option>
+            <option value="adaptive">自适应</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="practice-count"><i class="fas fa-list-ol"></i> 题目数量</label>
+          <select class="form-select" id="practice-count">
+            <option value="5">5题</option>
+            <option value="10" selected>10题</option>
+            <option value="15">15题</option>
+            <option value="20">20题</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="practice-topic"><i class="fas fa-bullseye"></i> 知识点（可选）</label>
+        <input type="text" class="form-input" id="practice-topic" placeholder="例如：分数加减法、古诗词填空...">
+      </div>
+
+      <button class="btn btn-primary btn-large btn-block" id="start-practice-btn">
+        <i class="fas fa-play-circle"></i> 开始练习
+      </button>
+    </div>
+  </div>
+
+  <!-- 题目展示区域 -->
+  <div id="practice-questions" class="hidden">
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title"><i class="fas fa-question-circle"></i> 练习题</h2>
+        <div>
+          <span class="badge badge-primary" id="progress-badge">0/0</span>
+          <button class="btn btn-secondary" id="submit-practice-btn" style="margin-left: var(--spacing-sm);">
+            <i class="fas fa-check"></i> 提交答案
+          </button>
+        </div>
+      </div>
+      <div class="card-body" id="questions-container">
+        <!-- 题目将在这里动态生成 -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 答题结果 -->
+  <div id="practice-result" class="hidden">
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title"><i class="fas fa-star"></i> 练习结果</h2>
+        <button class="btn btn-primary" id="new-practice-btn"><i class="fas fa-redo"></i> 再来一组</button>
+      </div>
+      <div class="card-body">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon success"><i class="fas fa-check"></i></div>
+            <div class="stat-content">
+              <div class="stat-label">正确题数</div>
+              <div class="stat-value" id="correct-count">0</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon warning"><i class="fas fa-times"></i></div>
+            <div class="stat-content">
+              <div class="stat-label">错误题数</div>
+              <div class="stat-value" id="wrong-count">0</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon student"><i class="fas fa-percentage"></i></div>
+            <div class="stat-content">
+              <div class="stat-label">正确率</div>
+              <div class="stat-value" id="accuracy-rate">0%</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="result-detail" style="margin-top: var(--spacing-lg);">
+          <!-- 详细答题解析 -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="../../js/pages/practice.js"></script>
+<script>
+  document.addEventListener('page-loaded', function(e) {
+    if (e.detail.route && e.detail.route.page === 'practice') {
+      setTimeout(function() {
+        if (App.Pages && App.Pages.Practice) App.Pages.Practice.init();
+      }, 100);
+    }
+  });
+  if (window.location.hash === '#/student/practice') {
+    setTimeout(function() {
+      if (App.Pages && App.Pages.Practice) App.Pages.Practice.init();
+    }, 500);
+  }
+</script>

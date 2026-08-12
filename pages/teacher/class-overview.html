@@ -1,0 +1,166 @@
+<!-- 班级学情总览页面 -->
+<section id="class-overview-page" class="page-container port-teacher">
+  <div class="page-header-bg"></div>
+  <div class="page-header">
+    <div class="arc-decoration"></div>
+    <h1 class="page-title"><i class="fas fa-chart-bar"></i> 班级学情总览</h1>
+    <div class="classroom-decor">
+      <span>🏫</span>
+      <span>全班同学一起进步 🌟</span>
+      <span>📚📖✏️📐</span>
+    </div>
+    <p class="page-subtitle"><span class="title-decoration left">📊🎯</span>全面了解班级整体学习情况，精准把握教学方向<span class="title-decoration right">🚀💪</span></p>
+  </div>
+
+  <!-- 班级选择 -->
+  <div class="card">
+    <div class="card-body" style="padding: var(--spacing-md) var(--spacing-lg);">
+      <div class="form-row" style="align-items: flex-end;">
+        <div class="form-group mb-0">
+          <label class="form-label" for="class-select"><i class="fas fa-school"></i> 选择班级</label>
+          <select class="form-select" id="class-select" style="width: 200px;">
+            <option value="class1">三年级(1)班</option>
+            <option value="class2">三年级(2)班</option>
+            <option value="class3">四年级(1)班</option>
+            <option value="class4">五年级(1)班</option>
+          </select>
+        </div>
+        <div class="form-group mb-0">
+          <label class="form-label" for="subject-overview"><i class="fas fa-book"></i> 选择学科</label>
+          <select class="form-select" id="subject-overview" style="width: 200px;">
+            <option value="chinese">语文</option>
+            <option value="math">数学</option>
+            <option value="english">英语</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" id="refresh-overview"><i class="fas fa-sync-alt"></i> 刷新数据</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 统计卡片 -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon primary"><i class="fas fa-users"></i></div>
+      <div class="stat-content">
+        <div class="stat-label">班级人数</div>
+        <div class="stat-value" id="stat-students">--</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon success"><i class="fas fa-chart-line"></i></div>
+      <div class="stat-content">
+        <div class="stat-label">平均分</div>
+        <div class="stat-value" id="stat-avg-score">--</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon warning"><i class="fas fa-clipboard-check"></i></div>
+      <div class="stat-content">
+        <div class="stat-label">作业完成率</div>
+        <div class="stat-value" id="stat-homework-rate">--</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon info"><i class="fas fa-trophy"></i></div>
+      <div class="stat-content">
+        <div class="stat-label">优秀率</div>
+        <div class="stat-value" id="stat-excellent-rate">--</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 图表区域 -->
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-lg);">
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title"><i class="fas fa-chart-area"></i> 成绩分布</h2>
+      </div>
+      <div class="card-body">
+        <div class="chart-placeholder" id="score-distribution-chart">
+          <p>成绩分布图表区域</p>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title"><i class="fas fa-chart-line"></i> 学习趋势</h2>
+      </div>
+      <div class="card-body">
+        <div class="chart-placeholder" id="learning-trend-chart">
+          <p>学习趋势图表区域</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h2 class="card-title"><i class="fas fa-exclamation-triangle"></i> 薄弱知识点排行</h2>
+    </div>
+    <div class="card-body">
+      <div id="weak-points-list">
+        <div class="chart-placeholder">
+          <p>薄弱知识点分析区域</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+.score-distribution-chart {
+  display: flex; justify-content: space-around; align-items: flex-end;
+  height: 200px; padding: 20px 10px; gap: 10px;
+}
+.bar-item { display: flex; flex-direction: column; align-items: center; flex: 1; gap: 8px; }
+.bar-value { font-size: 12px; color: var(--text-secondary); font-weight: 500; }
+.bar-container {
+  width: 40px; height: 150px; background: var(--bg-body);
+  border-radius: var(--radius-sm); position: relative; display: flex; align-items: flex-end;
+}
+.bar-fill {
+  width: 100%; background: var(--teacher-gradient);
+  border-radius: var(--radius-sm); transition: height 0.5s ease;
+}
+.bar-label { font-size: 12px; color: var(--text-primary); font-weight: 500; }
+.bar-percentage { font-size: 11px; color: var(--text-tertiary); }
+.weak-points-list { display: flex; flex-direction: column; gap: 12px; }
+.weak-point-item {
+  display: flex; align-items: center; gap: 12px; padding: 12px;
+  background: var(--bg-body); border-radius: var(--radius-md);
+}
+.weak-point-rank {
+  width: 28px; height: 28px; background: var(--teacher-gradient);
+  color: white; border-radius: 50%; display: flex; align-items: center;
+  justify-content: center; font-weight: 700; font-size: 13px; flex-shrink: 0;
+}
+.weak-point-info { flex: 0 0 120px; }
+.weak-point-name { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 2px; }
+.weak-point-meta { font-size: 12px; color: var(--text-tertiary); }
+.weak-point-bar { flex: 1; height: 8px; background: var(--border-light); border-radius: 4px; overflow: hidden; }
+.weak-point-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
+.weak-point-value { width: 50px; text-align: right; font-weight: 700; font-size: 14px; }
+@media (max-width: 768px) {
+  .score-distribution-chart { height: 150px; }
+  .bar-container { width: 30px; height: 100px; }
+  .weak-point-info { flex: 0 0 80px; }
+  .weak-point-name { font-size: 13px; }
+}
+</style>
+
+<script src="../../js/pages/class-overview.js"></script>
+<script>
+  document.addEventListener('page-loaded', function(e) {
+    if (e.detail.route && e.detail.route.page === 'class-overview') {
+      setTimeout(function() {
+        if (App.Pages && App.Pages.ClassOverview) App.Pages.ClassOverview.init();
+      }, 100);
+    }
+  });
+  if (window.location.hash === '#/teacher/class-overview') {
+    setTimeout(function() {
+      if (App.Pages && App.Pages.ClassOverview) App.Pages.ClassOverview.init();
+    }, 500);
+  }
+</script>

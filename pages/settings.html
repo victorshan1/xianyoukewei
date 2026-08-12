@@ -1,0 +1,111 @@
+<!-- 设置页面 -->
+<section id="settings-page" class="page-container">
+  <div class="page-header-bg"></div>
+  <div class="page-header">
+    <div class="arc-decoration"></div>
+    <h1 class="page-title"><i class="fas fa-cog"></i> 设置</h1>
+    <div class="classroom-decor">
+      <span>⚙️</span>
+      <span>个性化配置您的专属AI助教 🔧</span>
+      <span>🔑🤖🔐</span>
+    </div>
+    <p class="page-subtitle"><span class="title-decoration left">🔧⚙️</span>配置AI服务和应用参数<span class="title-decoration right">🛠️🔩</span></p>
+  </div>
+
+  <!-- API Key配置 -->
+  <div class="card">
+    <div class="card-header">
+      <h2 class="card-title"><i class="fas fa-key"></i> API Key 配置</h2>
+    </div>
+    <div class="card-body">
+      <div class="form-group">
+        <label class="form-label" for="api-key"><i class="fas fa-lock"></i> API Key</label>
+        <input type="password" class="form-input" id="api-key" placeholder="请输入您的API Key">
+        <div style="margin-top: var(--spacing-xs); font-size: 12px; color: var(--text-tertiary);">
+          <i class="fas fa-shield-alt"></i> API Key仅存储在本地浏览器中，不会上传到任何服务器
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="api-base-url"><i class="fas fa-link"></i> API Base URL（可选）</label>
+        <input type="text" class="form-input" id="api-base-url" placeholder="https://api.example.com/v1">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="model-select"><i class="fas fa-robot"></i> AI模型</label>
+        <select class="form-select" id="model-select">
+          <option value="qwen-max">通义千问 Max（推荐）</option>
+          <option value="qwen-plus">通义千问 Plus（轻量）</option>
+          <option value="qwen-turbo">通义千问 Turbo（快速）</option>
+          <option value="qwen-vl-max">通义千问 VL Max（视觉理解）</option>
+          <option value="qwen-vl-plus">通义千问 VL Plus（视觉轻量）</option>
+          <option value="deepseek-chat">DeepSeek Chat</option>
+          <option value="deepseek-reasoner">DeepSeek Reasoner</option>
+          <option value="custom">自定义模型</option>
+        </select>
+      </div>
+
+      <div class="form-group hidden" id="custom-model-group">
+        <label class="form-label" for="custom-model"><i class="fas fa-edit"></i> 自定义模型名称</label>
+        <input type="text" class="form-input" id="custom-model" placeholder="例如：gpt-4o、deepseek-chat">
+        <div style="margin-top: var(--spacing-xs); font-size: 12px; color: var(--text-tertiary);">
+          <i class="fas fa-info-circle"></i> 选择"自定义模型"时，请输入完整的模型名称
+        </div>
+      </div>
+
+      <div style="display: flex; gap: var(--spacing-sm);">
+        <button class="btn btn-primary" id="save-settings-btn"><i class="fas fa-save"></i> 保存配置</button>
+        <button class="btn btn-secondary" id="test-connection-btn"><i class="fas fa-plug"></i> 测试连接</button>
+      </div>
+
+      <div id="settings-message" class="hidden mt-md"></div>
+    </div>
+  </div>
+
+  <!-- 数据管理 -->
+  <div class="card">
+    <div class="card-header">
+      <h2 class="card-title"><i class="fas fa-database"></i> 数据管理</h2>
+    </div>
+    <div class="card-body">
+      <p style="color: var(--text-secondary); margin-bottom: var(--spacing-md);">
+        <i class="fas fa-info-circle"></i> 所有数据存储在浏览器本地，清除浏览器数据会导致数据丢失
+      </p>
+      <div style="display: flex; gap: var(--spacing-sm); flex-wrap: wrap;">
+        <button class="btn btn-secondary" id="export-data-btn"><i class="fas fa-download"></i> 导出数据</button>
+        <button class="btn btn-secondary" id="import-data-btn"><i class="fas fa-upload"></i> 导入数据</button>
+        <button class="btn btn-danger" id="clear-data-btn"><i class="fas fa-trash-alt"></i> 清除所有数据</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 关于 -->
+  <div class="card">
+    <div class="card-header">
+      <h2 class="card-title"><i class="fas fa-heart"></i> 关于</h2>
+    </div>
+    <div class="card-body">
+      <p style="color: var(--text-secondary); line-height: 1.8;">
+        <strong style="background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-size: 18px;">乡村课堂AI助教</strong> v1.0.0<br><br>
+        面向乡村教育的AI助教平台，帮助教师提升教学效率，帮助学生个性化学习，帮助家长了解孩子学习情况。<br><br>
+        <i class="fas fa-shield-alt" style="color: var(--primary);"></i> 本平台采用纯前端架构，所有数据存储在本地浏览器中，保护用户隐私。
+      </p>
+    </div>
+  </div>
+</section>
+
+<script src="../js/pages/settings.js"></script>
+<script>
+  document.addEventListener('page-loaded', function(e) {
+    if (e.detail.route && e.detail.route.page === 'settings') {
+      setTimeout(function() {
+        if (App.Pages && App.Pages.Settings) App.Pages.Settings.init();
+      }, 100);
+    }
+  });
+  if (window.location.hash === '#/settings') {
+    setTimeout(function() {
+      if (App.Pages && App.Pages.Settings) App.Pages.Settings.init();
+    }, 500);
+  }
+</script>

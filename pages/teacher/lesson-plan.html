@@ -1,0 +1,240 @@
+<!-- 备课助手页面 -->
+<section id="lesson-plan-page" class="page-container port-teacher">
+  <div class="page-header-bg"></div>
+  <div class="page-header">
+    <div class="arc-decoration"></div>
+    <h1 class="page-title"><i class="fas fa-book-open"></i> 备课助手</h1>
+    <div class="classroom-decor">
+      <div class="teacher-figure">
+        <div class="hair"></div>
+        <div class="head"></div>
+        <div class="body"></div>
+        <div class="pointer"></div>
+      </div>
+      <span>👩‍🏫 让每一堂课都精彩</span>
+      <div class="student-figure-group">
+        <div class="student-figure"><div class="head"></div><div class="body"></div></div>
+        <div class="student-figure girl"><div class="head"></div><div class="body"></div></div>
+        <div class="student-figure"><div class="head"></div><div class="body"></div></div>
+      </div>
+    </div>
+    <p class="page-subtitle"><span class="title-decoration left">📚✨</span>AI智能生成教学方案，提升备课效率<span class="title-decoration right">🎯💡</span></p>
+  </div>
+
+  <!-- 功能入口 -->
+  <div class="feature-grid">
+    <a class="feature-card" href="#/teacher/lesson-plan" onclick="return false;">
+      <div class="corner-decoration"></div>
+      <div class="feature-icon"><i class="fas fa-book-open"></i></div>
+      <div class="feature-title"><span class="scene-emoji">📚</span>智能备课</div>
+      <div class="feature-desc">按课标生成教案与分层作业</div>
+    </a>
+    <a class="feature-card" href="#/teacher/student-profile">
+      <div class="corner-decoration"></div>
+      <div class="feature-icon"><i class="fas fa-user-graduate"></i></div>
+      <div class="feature-title"><span class="scene-emoji">📊</span>学生画像</div>
+      <div class="feature-desc">五维雷达图 + 归因分析</div>
+    </a>
+    <a class="feature-card" href="#/teacher/class-overview">
+      <div class="corner-decoration"></div>
+      <div class="feature-icon"><i class="fas fa-chart-bar"></i></div>
+      <div class="feature-title"><span class="scene-emoji">🏫</span>班级总览</div>
+      <div class="feature-desc">班级学情数据一目了然</div>
+    </a>
+  </div>
+
+  <!-- 输入表单 -->
+  <div class="card">
+    <div class="card-header">
+      <h2 class="card-title"><i class="fas fa-edit"></i> 课程信息</h2>
+    </div>
+    <div class="card-body">
+      <form id="lesson-plan-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="subject"><i class="fas fa-book"></i> 学科</label>
+            <select class="form-select" id="subject" required>
+              <option value="">请选择学科</option>
+              <option value="语文">语文</option>
+              <option value="数学">数学</option>
+              <option value="英语">英语</option>
+              <option value="物理">物理</option>
+              <option value="化学">化学</option>
+              <option value="生物">生物</option>
+              <option value="历史">历史</option>
+              <option value="地理">地理</option>
+              <option value="政治">政治</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="grade"><i class="fas fa-graduation-cap"></i> 年级</label>
+            <select class="form-select" id="grade" required>
+              <option value="">请选择年级</option>
+              <option value="一年级">一年级</option>
+              <option value="二年级">二年级</option>
+              <option value="三年级">三年级</option>
+              <option value="四年级">四年级</option>
+              <option value="五年级">五年级</option>
+              <option value="六年级">六年级</option>
+              <option value="七年级">七年级</option>
+              <option value="八年级">八年级</option>
+              <option value="九年级">九年级</option>
+              <option value="高一">高一</option>
+              <option value="高二">高二</option>
+              <option value="高三">高三</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="duration"><i class="fas fa-clock"></i> 课时</label>
+            <select class="form-select" id="duration">
+              <option value="1课时">1课时</option>
+              <option value="2课时">2课时</option>
+              <option value="3课时">3课时</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 教案模板选择 -->
+        <div class="form-group">
+          <label class="form-label"><i class="fas fa-th-large"></i> 教案模板</label>
+          <div class="template-grid">
+            <label class="template-card active" data-template="new-lesson">
+              <input type="radio" name="lesson-template" value="new-lesson" checked style="display:none;">
+              <div class="template-icon">📖</div>
+              <div class="template-name">新授课</div>
+              <div class="template-desc">知识讲解 + 课堂练习</div>
+            </label>
+            <label class="template-card" data-template="review">
+              <input type="radio" name="lesson-template" value="review" style="display:none;">
+              <div class="template-icon">🔄</div>
+              <div class="template-name">复习课</div>
+              <div class="template-desc">知识梳理 + 巩固练习</div>
+            </label>
+            <label class="template-card" data-template="experiment">
+              <input type="radio" name="lesson-template" value="experiment" style="display:none;">
+              <div class="template-icon"></div>
+              <div class="template-name">实验课</div>
+              <div class="template-desc">实验操作 + 观察记录</div>
+            </label>
+            <label class="template-card" data-template="commentary">
+              <input type="radio" name="lesson-template" value="commentary" style="display:none;">
+              <div class="template-icon">📝</div>
+              <div class="template-name">讲评课</div>
+              <div class="template-desc">试卷讲评 + 错题分析</div>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="topic"><i class="fas fa-lightbulb"></i> 课题名称</label>
+          <input type="text" class="form-input" id="topic" placeholder="例如：《春晓》古诗赏析" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="objectives"><i class="fas fa-bullseye"></i> 教学目标（可选）</label>
+          <textarea class="form-textarea" id="objectives" placeholder="请输入教学目标，如：理解诗歌意境，掌握生字词..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="requirements"><i class="fas fa-star"></i> 特殊要求（可选）</label>
+          <textarea class="form-textarea" id="requirements" placeholder="请输入特殊要求，如：适合基础薄弱的学生，增加互动环节..."></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-large btn-block">
+          <i class="fas fa-magic"></i> 生成教学方案
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 结果展示区域 -->
+  <div id="lesson-plan-result" class="hidden">
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title"><i class="fas fa-file-alt"></i> 生成的教学方案</h2>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button class="btn btn-secondary btn-small edit-toggle-btn" id="edit-toggle-btn"><i class="fas fa-edit"></i> 编辑</button>
+          <button class="btn btn-secondary btn-small" id="copy-plan-btn"><i class="fas fa-copy"></i> 复制方案</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <!-- 预览模式 -->
+        <div id="plan-preview">
+          <div id="plan-content"></div>
+        </div>
+        <!-- 编辑模式 -->
+        <div id="plan-editor" class="hidden">
+          <div class="editor-toolbar" id="editor-toolbar">
+            <button data-cmd="bold" title="加粗"><i class="fas fa-bold"></i></button>
+            <button data-cmd="italic" title="斜体"><i class="fas fa-italic"></i></button>
+            <button data-cmd="underline" title="下划线"><i class="fas fa-underline"></i></button>
+            <button data-cmd="insertUnorderedList" title="无序列表"><i class="fas fa-list-ul"></i></button>
+            <button data-cmd="insertOrderedList" title="有序列表"><i class="fas fa-list-ol"></i></button>
+            <button data-cmd="formatBlock" data-value="h2" title="标题"><i class="fas fa-heading"></i></button>
+            <button data-cmd="formatBlock" data-value="p" title="正文"><i class="fas fa-paragraph"></i></button>
+            <button data-cmd="removeFormat" title="清除格式"><i class="fas fa-eraser"></i></button>
+          </div>
+          <div class="editor-content" id="plan-editable" contenteditable="true"></div>
+          <div class="editor-actions">
+            <button class="btn btn-primary btn-small" id="save-edit-btn"><i class="fas fa-save"></i> 保存修改</button>
+            <button class="btn btn-secondary btn-small" id="cancel-edit-btn"><i class="fas fa-times"></i> 取消编辑</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分层作业区域 -->
+    <div class="card" id="homework-section">
+      <div class="card-header">
+        <h2 class="card-title"><i class="fas fa-layer-group"></i> 分层作业</h2>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-secondary btn-small edit-toggle-btn" id="edit-homework-btn"><i class="fas fa-edit"></i> 编辑</button>
+          <button class="btn btn-secondary btn-small" id="copy-homework-btn"><i class="fas fa-copy"></i> 复制作业</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <!-- 预览模式 -->
+        <div id="homework-preview">
+          <div id="homework-content"></div>
+        </div>
+        <!-- 编辑模式 -->
+        <div id="homework-editor" class="hidden">
+          <div class="editor-toolbar" id="homework-toolbar">
+            <button data-cmd="bold" title="加粗"><i class="fas fa-bold"></i></button>
+            <button data-cmd="italic" title="斜体"><i class="fas fa-italic"></i></button>
+            <button data-cmd="underline" title="下划线"><i class="fas fa-underline"></i></button>
+            <button data-cmd="insertUnorderedList" title="无序列表"><i class="fas fa-list-ul"></i></button>
+            <button data-cmd="insertOrderedList" title="有序列表"><i class="fas fa-list-ol"></i></button>
+            <button data-cmd="formatBlock" data-value="h3" title="标题"><i class="fas fa-heading"></i></button>
+            <button data-cmd="formatBlock" data-value="p" title="正文"><i class="fas fa-paragraph"></i></button>
+            <button data-cmd="removeFormat" title="清除格式"><i class="fas fa-eraser"></i></button>
+          </div>
+          <div class="editor-content" id="homework-editable" contenteditable="true"></div>
+          <div class="editor-actions">
+            <button class="btn btn-primary btn-small" id="save-homework-edit-btn"><i class="fas fa-save"></i> 保存修改</button>
+            <button class="btn btn-secondary btn-small" id="cancel-homework-edit-btn"><i class="fas fa-times"></i> 取消编辑</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="../../js/pages/lesson-plan.js"></script>
+<script>
+  document.addEventListener('page-loaded', function(e) {
+    if (e.detail.route && e.detail.route.page === 'lesson-plan') {
+      setTimeout(function() {
+        if (App.Pages && App.Pages.LessonPlan) {
+          App.Pages.LessonPlan.init();
+        }
+      }, 100);
+    }
+  });
+  if (window.location.hash === '#/teacher/lesson-plan' || !window.location.hash) {
+    setTimeout(function() {
+      if (App.Pages && App.Pages.LessonPlan) {
+        App.Pages.LessonPlan.init();
+                                   

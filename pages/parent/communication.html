@@ -1,0 +1,101 @@
+<!-- 家校沟通页面 -->
+<section id="communication-page" class="page-container port-parent">
+  <div class="page-header-bg"></div>
+  <div class="page-header">
+    <div class="arc-decoration"></div>
+    <h1 class="page-title"><i class="fas fa-comments"></i> 家校沟通</h1>
+    <div class="classroom-decor">
+      <span>🏡</span>
+      <span>架起家校之间的温暖桥梁 🌉</span>
+      <span>💞🤝✉️</span>
+    </div>
+    <p class="page-subtitle"><span class="title-decoration left">💬💝</span>AI辅助生成沟通话术，促进家校良好互动<span class="title-decoration right">🌉🤝</span></p>
+  </div>
+
+  <!-- 沟通场景选择 -->
+  <div class="card">
+    <div class="card-header">
+      <h2 class="card-title"><i class="fas fa-list-alt"></i> 选择沟通场景</h2>
+    </div>
+    <div class="card-body">
+      <div class="form-group">
+        <label class="form-label" for="communication-scenario"><i class="fas fa-tag"></i> 沟通场景</label>
+        <select class="form-select" id="communication-scenario" required>
+          <option value="">请选择场景</option>
+          <option value="homework">📝 询问作业情况</option>
+          <option value="performance">📊 了解学习表现</option>
+          <option value="behavior">🙋 沟通行为问题</option>
+          <option value="attendance">📅 请假/考勤</option>
+          <option value="activity">🎉 学校活动咨询</option>
+          <option value="feedback">💡 反馈意见</option>
+          <option value="other">📌 其他</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="communication-target"><i class="fas fa-user-tie"></i> 沟通对象</label>
+        <select class="form-select" id="communication-target">
+          <option value="teacher">班主任</option>
+          <option value="subject-teacher">科任老师</option>
+          <option value="principal">校领导</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="communication-content"><i class="fas fa-edit"></i> 具体内容（可选）</label>
+        <textarea class="form-textarea" id="communication-content" placeholder="请描述您想了解或沟通的具体内容..."></textarea>
+      </div>
+
+      <button class="btn btn-primary btn-large btn-block" id="generate-script-btn">
+        <i class="fas fa-magic"></i> 生成沟通话术
+      </button>
+    </div>
+  </div>
+
+  <!-- 话术展示区域 -->
+  <div id="communication-script" class="hidden">
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title"><i class="fas fa-comment-dots"></i> 沟通话术建议</h2>
+        <button class="btn btn-secondary" id="copy-script-btn"><i class="fas fa-copy"></i> 复制话术</button>
+      </div>
+      <div class="card-body">
+        <div id="script-content"></div>
+      </div>
+    </div>
+
+    <!-- 沟通技巧 -->
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title"><i class="fas fa-lightbulb"></i> 沟通技巧提示</h2>
+      </div>
+      <div class="card-body">
+        <div id="communication-tips">
+          <ul style="line-height: 2; color: var(--text-secondary); list-style: none;">
+            <li><i class="fas fa-check-circle" style="color: var(--parent-color); margin-right: 8px;"></i>保持礼貌和尊重的语气</li>
+            <li><i class="fas fa-check-circle" style="color: var(--parent-color); margin-right: 8px;"></i>先表达感谢，再提出问题</li>
+            <li><i class="fas fa-check-circle" style="color: var(--parent-color); margin-right: 8px;"></i>具体描述问题，避免笼统</li>
+            <li><i class="fas fa-check-circle" style="color: var(--parent-color); margin-right: 8px;"></i>倾听老师的观点和建议</li>
+            <li><i class="fas fa-check-circle" style="color: var(--parent-color); margin-right: 8px;"></i>共同商讨解决方案</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="../../js/pages/communication.js"></script>
+<script>
+  document.addEventListener('page-loaded', function(e) {
+    if (e.detail.route && e.detail.route.page === 'communication') {
+      setTimeout(function() {
+        if (App.Pages && App.Pages.Communication) App.Pages.Communication.init();
+      }, 100);
+    }
+  });
+  if (window.location.hash === '#/parent/communication') {
+    setTimeout(function() {
+      if (App.Pages && App.Pages.Communication) App.Pages.Communication.init();
+    }, 500);
+  }
+</script>

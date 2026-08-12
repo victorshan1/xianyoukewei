@@ -1,0 +1,192 @@
+<!-- 学情报告页面 -->
+<section id="report-page" class="page-container port-parent">
+  <div class="page-header-bg"></div>
+  <div class="page-header">
+    <div class="arc-decoration"></div>
+    <h1 class="page-title"><i class="fas fa-chart-line"></i> 学情报告</h1>
+    <div class="classroom-decor">
+      <span>👨‍👩‍👧</span>
+      <span>陪伴孩子，共同成长 🌱</span>
+      <span>💝📊🌈</span>
+    </div>
+    <p class="page-subtitle"><span class="title-decoration left">💞📈</span>全面了解孩子的学习情况，与学校保持同步<span class="title-decoration right">🌟🏡</span></p>
+  </div>
+
+  <!-- 功能入口 -->
+  <div class="feature-grid">
+    <a class="feature-card" href="#/parent/report" onclick="return false;">
+      <div class="corner-decoration"></div>
+      <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+      <div class="feature-title"><span class="scene-emoji">📊</span>学情报告</div>
+      <div class="feature-desc">周报/月报可视化分析</div>
+    </a>
+    <a class="feature-card" href="#/parent/communication">
+      <div class="corner-decoration"></div>
+      <div class="feature-icon"><i class="fas fa-comments"></i></div>
+      <div class="feature-title"><span class="scene-emoji">💬</span>家校沟通</div>
+      <div class="feature-desc">AI生成个性化沟通话术</div>
+    </a>
+    <a class="feature-card" href="#/parent/report" onclick="return false;">
+      <div class="corner-decoration"></div>
+      <div class="feature-icon"><i class="fas fa-child"></i></div>
+      <div class="feature-title"><span class="scene-emoji">🌱</span>成长档案</div>
+      <div class="feature-desc">记录孩子每一步成长</div>
+    </a>
+  </div>
+
+  <!-- 报告类型切换 -->
+  <div class="card">
+    <div class="card-body" style="padding: var(--spacing-md) var(--spacing-lg);">
+      <div style="display: flex; gap: var(--spacing-md); align-items: center; flex-wrap: wrap;">
+        <div class="form-group mb-0">
+          <label class="form-label" for="student-select"><i class="fas fa-user"></i> 我的孩子</label>
+          <select class="form-select" id="student-select" style="width: 200px;">
+            <option value="">加载中...</option>
+          </select>
+        </div>
+        <div class="form-group mb-0">
+          <label class="form-label"><i class="fas fa-calendar-alt"></i> 报告类型</label>
+          <div style="display: flex; gap: var(--spacing-sm);">
+            <button class="btn btn-primary" id="weekly-report-btn"><i class="fas fa-calendar-week"></i> 周报</button>
+            <button class="btn btn-secondary" id="monthly-report-btn"><i class="fas fa-calendar"></i> 月报</button>
+          </div>
+        </div>
+        <div class="form-group mb-0">
+          <label class="form-label" for="report-period"><i class="fas fa-clock"></i> 时间段</label>
+          <select class="form-select" id="report-period" style="width: 200px;">
+            <option value="current">本周</option>
+            <option value="last">上周</option>
+            <option value="custom">自定义</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 学习概况统计 -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon parent"><i class="fas fa-book-reader"></i></div>
+      <div class="stat-content">
+        <div class="stat-label">学习时长</div>
+        <div class="stat-value" id="stat-study-hours">--</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon success"><i class="fas fa-check-circle"></i></div>
+      <div class="stat-content">
+        <div class="stat-label">作业完成率</div>
+        <div class="stat-value" id="stat-homework-completion">--</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon warning"><i class="fas fa-chart-bar"></i></div>
+      <div class="stat-content">
+        <div class="stat-label">平均成绩</div>
+        <div class="stat-value" id="stat-average-score">--</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon info"><i class="fas fa-bullseye"></i></div>
+      <div class="stat-content">
+        <div class="stat-label">知识点掌握</div>
+        <div class="stat-value" id="stat-knowledge-mastery">--</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 图表区域 -->
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-lg);">
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title"><i class="fas fa-chart-line"></i> 成绩趋势</h2>
+      </div>
+      <div class="card-body">
+        <div class="chart-placeholder" id="score-trend-chart">
+          <p>成绩趋势图表区域</p>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title"><i class="fas fa-chart-pie"></i> 学科表现</h2>
+      </div>
+      <div class="card-body">
+        <div class="chart-placeholder" id="subject-performance-chart">
+          <p>学科表现图表区域</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 详细分析 -->
+  <div class="card">
+    <div class="card-header">
+      <h2 class="card-title"><i class="fas fa-search"></i> 学习情况分析</h2>
+    </div>
+    <div class="card-body">
+      <div id="analysis-content">
+        <div class="loading-container">
+          <p style="color: var(--text-tertiary);">暂无分析数据</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 教师建议 -->
+  <div class="card">
+    <div class="card-header">
+      <h2 class="card-title"><i class="fas fa-lightbulb"></i> 教师建议</h2>
+    </div>
+    <div class="card-body">
+      <div id="teacher-suggestions">
+        <div class="loading-container">
+          <p style="color: var(--text-tertiary);">暂无教师建议</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+.analysis-section { line-height: 1.8; }
+.analysis-title { font-size: 15px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; }
+.score-table { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+.score-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 16px; background: var(--bg-body); border-radius: var(--radius-md);
+}
+.score-subject { font-size: 14px; color: var(--text-primary); font-weight: 500; }
+.score-value { font-size: 16px; font-weight: 700; }
+.weak-points { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.weak-tag {
+  display: inline-block; padding: 6px 14px; background: var(--danger-light);
+  color: var(--danger); border-radius: var(--radius-full); font-size: 13px; font-weight: 600;
+}
+.dimension-bars { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
+.dimension-item { display: flex; align-items: center; gap: 12px; }
+.dimension-label { width: 100px; font-size: 13px; color: var(--text-secondary); }
+.dimension-bar {
+  flex: 1; height: 20px; background: var(--bg-body);
+  border-radius: var(--radius-full); overflow: hidden;
+}
+.dimension-fill { height: 100%; border-radius: var(--radius-full); transition: width 0.5s ease; }
+.dimension-value { width: 40px; text-align: right; font-size: 13px; font-weight: 600; color: var(--text-primary); }
+@media (max-width: 768px) { .dimension-label { width: 80px; } }
+</style>
+
+<script src="../../js/pages/report.js"></script>
+<script>
+  document.addEventListener('page-loaded', function(e) {
+    if (e.detail.route && e.detail.route.page === 'report') {
+      setTimeout(function() {
+        if (App.Pages && App.Pages.Report) App.Pages.Report.init();
+      }, 100);
+    }
+  });
+  if (window.location.hash === '#/parent/report') {
+    setTimeout(function() {
+      if (App.Pages && App.Pages.Report) App.Pages.Report.init();
+    }, 500);
+  }
+</script>

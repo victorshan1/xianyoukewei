@@ -1,0 +1,258 @@
+<!-- 错题本页面 -->
+<section id="wrong-book-page" class="page-container port-student">
+  <div class="page-header">
+    <h1 class="page-title"><i class="fas fa-book-open"></i> 错题本</h1>
+    <p class="page-subtitle">📝✏️ 记录每一道错题，攻克每一个薄弱点 🎯💡</p>
+  </div>
+
+  <!-- 功能入口 -->
+  <div class="feature-grid">
+    <a class="feature-card" href="#/student/wrong-book" onclick="return false;">
+      <div class="feature-icon"><i class="fas fa-book-open"></i></div>
+      <div class="feature-title">错题本</div>
+      <div class="feature-desc">我的错题，逐个攻克</div>
+    </a>
+    <a class="feature-card" href="#/student/photo-qa">
+      <div class="feature-icon"><i class="fas fa-camera"></i></div>
+      <div class="feature-title">拍照答疑</div>
+      <div class="feature-desc">拍题目，AI秒出解析</div>
+    </a>
+    <a class="feature-card" href="#/student/practice">
+      <div class="feature-icon"><i class="fas fa-pen-fancy"></i></div>
+      <div class="feature-title">针对性练习</div>
+      <div class="feature-desc">薄弱知识点专项训练</div>
+    </a>
+  </div>
+
+  <!-- 统计卡片 -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon warning"><i class="fas fa-times-circle"></i></div>
+      <div class="stat-content">
+        <div class="stat-label">待攻克</div>
+        <div class="stat-value" id="stat-wrong-count">0</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon success"><i class="fas fa-check-circle"></i></div>
+      <div class="stat-content">
+        <div class="stat-label">已掌握</div>
+        <div class="stat-value" id="stat-mastered-count">0</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon student"><i class="fas fa-percentage"></i></div>
+      <div class="stat-content">
+        <div class="stat-label">掌握率</div>
+        <div class="stat-value" id="stat-mastery-rate">0%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 筛选栏 -->
+  <div class="card">
+    <div class="card-body" style="padding: var(--spacing-md) var(--spacing-lg);">
+      <div style="display: flex; gap: var(--spacing-md); align-items: center; flex-wrap: wrap;">
+        <div class="form-group mb-0">
+          <label class="form-label" for="wrong-subject-filter"><i class="fas fa-book"></i> 学科</label>
+          <select class="form-select" id="wrong-subject-filter" style="width: 150px;">
+            <option value="">全部学科</option>
+            <option value="语文">语文</option>
+            <option value="数学">数学</option>
+            <option value="英语">英语</option>
+            <option value="物理">物理</option>
+            <option value="化学">化学</option>
+          </select>
+        </div>
+        <div class="form-group mb-0">
+          <label class="form-label"><i class="fas fa-filter"></i> 状态</label>
+          <div style="display: flex; gap: var(--spacing-sm);">
+            <button class="btn btn-primary btn-small wrong-filter-btn active" data-status="">全部</button>
+            <button class="btn btn-secondary btn-small wrong-filter-btn" data-status="wrong">待攻克</button>
+            <button class="btn btn-secondary btn-small wrong-filter-btn" data-status="mastered">已掌握</button>
+          </div>
+        </div>
+        <div style="margin-left: auto;">
+          <button class="btn btn-secondary btn-small" id="add-wrong-btn">
+            <i class="fas fa-plus"></i> 手动添加
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 错题列表 -->
+  <div id="wrong-list-container">
+    <div class="loading-container">
+      <div class="spinner"></div>
+      <div>加载中...</div>
+    </div>
+  </div>
+</section>
+
+<!-- 添加错题弹窗模板 -->
+<template id="add-wrong-modal-template">
+  <div class="modal-overlay">
+    <div class="modal-content" style="max-width: 500px;">
+      <div class="modal-header">
+        <h3><i class="fas fa-plus-circle"></i> 添加错题</h3>
+        <button class="modal-close" onclick="this.closest('.modal-overlay').remove()"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label"><i class="fas fa-book"></i> 学科</label>
+          <select class="form-select" id="add-wrong-subject" required>
+            <option value="">请选择学科</option>
+            <option value="语文">语文</option>
+            <option value="数学">数学</option>
+            <option value="英语">英语</option>
+            <option value="物理">物理</option>
+            <option value="化学">化学</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label"><i class="fas fa-question-circle"></i> 题目</label>
+          <textarea class="form-textarea" id="add-wrong-question" placeholder="请输入题目内容..." rows="3" required></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label"><i class="fas fa-user-edit"></i> 我的答案</label>
+          <input type="text" class="form-input" id="add-wrong-answer" placeholder="你写的答案">
+        </div>
+        <div class="form-group">
+          <label class="form-label"><i class="fas fa-check-circle"></i> 正确答案</label>
+          <input type="text" class="form-input" id="add-wrong-correct" placeholder="正确答案">
+        </div>
+        <div class="form-group">
+          <label class="form-label"><i class="fas fa-lightbulb"></i> 解析（可选）</label>
+          <textarea class="form-textarea" id="add-wrong-explanation" placeholder="为什么错了？正确思路是什么？" rows="2"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label"><i class="fas fa-tag"></i> 知识点（可选）</label>
+          <input type="text" class="form-input" id="add-wrong-knowledge" placeholder="例如：分数加减法">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="this.closest('.modal-overlay').remove()">取消</button>
+        <button class="btn btn-primary" id="save-wrong-btn"><i class="fas fa-save"></i> 保存</button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style>
+.wrong-item {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+  transition: var(--transition);
+  border-left: 4px solid var(--danger);
+}
+.wrong-item.mastered {
+  border-left-color: var(--success);
+  opacity: 0.75;
+}
+.wrong-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+.wrong-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-sm);
+}
+.wrong-item-subject {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--danger-light);
+  color: var(--danger);
+}
+.wrong-item.mastered .wrong-item-subject {
+  background: var(--success-light);
+  color: var(--success);
+}
+.wrong-item-date {
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+.wrong-item-question {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.6;
+  margin-bottom: var(--spacing-sm);
+}
+.wrong-item-answer {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+  font-size: 13px;
+}
+.wrong-answer-wrong {
+  color: var(--danger);
+}
+.wrong-answer-correct {
+  color: var(--success);
+}
+.wrong-answer-wrong i, .wrong-answer-correct i {
+  margin-right: 4px;
+}
+.wrong-item-explanation {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  background: var(--bg-body);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-sm);
+}
+.wrong-item-knowledge {
+  display: inline-block;
+  padding: 2px 10px;
+  background: var(--primary-light-bg, rgba(255,107,53,0.08));
+  color: var(--primary);
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  margin-right: 6px;
+}
+.wrong-item-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
+}
+.wrong-item-actions .btn {
+  font-size: 12px;
+  padding: 5px 14px;
+}
+.wrong-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-tertiary);
+}
+.wrong-empty i {
+  font-size: 48px;
+  margin-bottom: var(--spacing-md);
+  opacity: 0.3;
+}
+</style>
+
+<script src="../../js/pages/wrong-book.js"></script>
+<script>
+  document.addEventListener('page-loaded', function(e) {
+    if (e.detail.route && e.detail.route.page === 'wrong-book') {
+      setTimeout(function() {
+        if (App.Pages && App.Pages.WrongBook) App.Pages.WrongBook.init();
+      }, 100);
+    }
+  });
+  if (window.location.hash === '#/student/wrong-book') {
+    setTimeout(function() {
+      if (App.Pages && App.Pages.WrongBook) App.Pages.WrongBook.init();
+    }, 500);
+  }
+</script>

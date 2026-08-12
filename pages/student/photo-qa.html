@@ -1,0 +1,146 @@
+<!-- 拍照答疑页面 -->
+<section id="photo-qa-page" class="page-container port-student">
+  <div class="page-header-bg"></div>
+  <div class="page-header">
+    <div class="arc-decoration"></div>
+    <h1 class="page-title"><i class="fas fa-camera"></i> 拍照答疑</h1>
+    <div class="classroom-decor">
+      <span>📸</span>
+      <span>遇到难题不用怕，AI老师来帮忙 💡</span>
+      <span>🙋‍♂️🙋‍♀️✨</span>
+    </div>
+    <p class="page-subtitle"><span class="title-decoration left">📷🎤</span>拍照或语音提问，AI智能解答学习难题<span class="title-decoration right">🧠🔍</span></p>
+  </div>
+
+  <!-- 功能入口 -->
+  <div class="feature-grid">
+    <a class="feature-card" href="#/student/photo-qa" onclick="return false;">
+      <div class="corner-decoration"></div>
+      <div class="feature-icon"><i class="fas fa-camera"></i></div>
+      <div class="feature-title"><span class="scene-emoji">📷</span>拍照答疑</div>
+      <div class="feature-desc">拍题目，AI秒出解析</div>
+    </a>
+    <a class="feature-card" href="#/student/practice">
+      <div class="corner-decoration"></div>
+      <div class="feature-icon"><i class="fas fa-pen-fancy"></i></div>
+      <div class="feature-title"><span class="scene-emoji">✏️</span>针对性练习</div>
+      <div class="feature-desc">薄弱知识点专项训练</div>
+    </a>
+    <a class="feature-card" href="#/student/photo-qa" onclick="return false;">
+      <div class="corner-decoration"></div>
+      <div class="feature-icon"><i class="fas fa-microphone"></i></div>
+      <div class="feature-title"><span class="scene-emoji">🎤</span>语音提问</div>
+      <div class="feature-desc">语音输入，解放双手</div>
+    </a>
+  </div>
+
+  <!-- 输入区域 -->
+  <div class="card">
+    <div class="card-header">
+      <h2 class="card-title"><i class="fas fa-cloud-upload-alt"></i> 上传题目</h2>
+    </div>
+    <div class="card-body">
+      <!-- 图片上传区域 -->
+      <div class="upload-area" id="image-upload-area">
+        <div class="upload-icon"><i class="fas fa-camera-retro"></i></div>
+        <div class="upload-text">点击上传题目图片</div>
+        <div class="upload-hint">支持拍照或从相册选择，JPG、PNG 格式，不超过 5MB</div>
+        <input type="file" id="image-input" accept="image/*" style="display: none;">
+      </div>
+
+      <!-- 拍照按钮（移动端显示） -->
+      <div style="margin-top: var(--spacing-md); text-align: center;" class="mobile-only">
+        <button class="btn btn-secondary btn-large" id="camera-btn">
+          <i class="fas fa-camera"></i> 拍照答题
+        </button>
+        <input type="file" id="camera-input" accept="image/*" capture="environment" style="display: none;">
+      </div>
+
+      <!-- 图片预览 -->
+      <div id="image-preview" class="hidden" style="margin-top: var(--spacing-md);">
+        <img id="preview-image" style="max-width: 100%; border-radius: var(--radius-md);">
+        <button class="btn btn-secondary mt-sm" id="remove-image-btn"><i class="fas fa-times"></i> 移除图片</button>
+      </div>
+
+      <!-- 语音输入 -->
+      <div style="margin-top: var(--spacing-lg); text-align: center;">
+        <button class="btn btn-secondary btn-large" id="voice-input-btn">
+          <i class="fas fa-microphone"></i> 语音输入问题
+        </button>
+        <div id="voice-status" class="hidden mt-sm" style="color: var(--text-tertiary);">
+          正在录音...点击停止
+        </div>
+      </div>
+
+      <!-- 文字补充 -->
+      <div class="form-group mt-lg">
+        <label class="form-label" for="question-text"><i class="fas fa-pencil-alt"></i> 补充说明（可选）</label>
+        <textarea class="form-textarea" id="question-text" placeholder="如果有需要补充说明的内容，请在此输入..."></textarea>
+      </div>
+
+      <!-- 学科选择 -->
+      <div class="form-group">
+        <label class="form-label" for="qa-subject"><i class="fas fa-book"></i> 选择学科</label>
+        <select class="form-select" id="qa-subject" style="width: 200px;">
+          <option value="">自动识别</option>
+          <option value="语文">语文</option>
+          <option value="数学">数学</option>
+          <option value="英语">英语</option>
+          <option value="物理">物理</option>
+          <option value="化学">化学</option>
+          <option value="生物">生物</option>
+        </select>
+      </div>
+
+      <button class="btn btn-primary btn-large btn-block" id="submit-question-btn">
+        <i class="fas fa-paper-plane"></i> 提交问题
+      </button>
+    </div>
+  </div>
+
+  <!-- 结果展示区域 -->
+  <div id="qa-result" class="hidden">
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title"><i class="fas fa-check-circle"></i> 解答结果</h2>
+        <button class="btn btn-secondary" id="new-question-btn"><i class="fas fa-redo"></i> 继续提问</button>
+      </div>
+      <div class="card-body">
+        <div id="answer-content"></div>
+      </div>
+    </div>
+
+    <!-- 知识点卡片区域 -->
+    <div class="card" id="knowledge-section" style="display:none;">
+      <div class="card-header">
+        <h2 class="card-title"><i class="fas fa-lightbulb"></i> 知识点卡片</h2>
+      </div>
+      <div class="card-body">
+        <div id="knowledge-cards"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+@media (max-width: 768px) {
+  .upload-area { padding: 24px; }
+  .upload-icon { font-size: 36px; }
+}
+</style>
+
+<script src="../../js/pages/photo-qa.js"></script>
+<script>
+  document.addEventListener('page-loaded', function(e) {
+    if (e.detail.route && e.detail.route.page === 'photo-qa') {
+      setTimeout(function() {
+        if (App.Pages && App.Pages.PhotoQA) App.Pages.PhotoQA.init();
+      }, 100);
+    }
+  });
+  if (window.location.hash === '#/student/photo-qa') {
+    setTimeout(function() {
+      if (App.Pages && App.Pages.PhotoQA) App.Pages.PhotoQA.init();
+    }, 500);
+  }
+</script>
