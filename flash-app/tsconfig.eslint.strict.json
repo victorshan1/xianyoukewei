@@ -1,0 +1,23 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noImplicitOverride": true,
+    "types": ["vite/client", "node"]
+  },
+  "include": [
+    "src",
+    "plugins/**/*.ts",
+    "vite.config.ts",
+    "drizzle.config.ts",
+    "tooling/database/**/*.ts"
+  ],
+  "exclude": ["src/generated/**"]
+}

@@ -135,7 +135,7 @@
   // 数据库名称：rural_ai_tutor，版本：1
   // ============================================================
   const DB_NAME = 'rural_ai_tutor';
-  const DB_VERSION = 2;
+  const DB_VERSION = 3;
 
   // 数据库连接实例（单例）
   let _dbInstance = null;
@@ -202,6 +202,22 @@
         { name: 'by_student', keyPath: 'studentId', unique: false },
         { name: 'by_subject', keyPath: 'subject', unique: false },
         { name: 'by_status', keyPath: 'status', unique: false }
+      ]
+    },
+    {
+      name: 'messages',
+      options: { keyPath: 'id', autoIncrement: true },
+      indexes: [
+        { name: 'by_student', keyPath: 'studentId', unique: false },
+        { name: 'by_created', keyPath: 'createdAt', unique: false }
+      ]
+    },
+    {
+      // 删除标记表：记录"本地已删除但云端还保留"的记录特征，供同步时反向删除
+      name: 'deletions',
+      options: { keyPath: 'id', autoIncrement: true },
+      indexes: [
+        { name: 'by_resource', keyPath: 'resource', unique: false }
       ]
     }
   ];
@@ -412,6 +428,85 @@
               }
             };
           });
+        });
+      });
+    },
+
+    /**
+     * 清除指定 store 的所有数据（云同步拉取时使用）
+     * @param {string} storeName
+     * @returns {Promise<void>}
+     */
+    clear(storeName) {
+      return db._getDb().then(function (database) {
+        return new Promise(function (resolve, reject) {
+          const tx = database.transaction(storeName, 'readwrite');
+          const store = tx.objectStore(storeName);
+          const req = store.clear();
+          req.onsuccess = function () { resolve(); };
+          req.onerror = function () { reject(req.error); };
+        });
+      });
+    },
+
+    // ============================================================
+    // 删除标记（deletions）：供云同步反向删除本地已删除的记录
+    // ============================================================
+
+    /**
+     * 新增一条删除标记
+     * @param {object} item - { resource, keyJson, createdAt }
+     * @returns {Promise<void>}
+     */
+    addDeletion(item) {
+      return db._transaction('deletions', 'readwrite', function (store) {
+        return store.add(item);
+      });
+    },
+
+    /**
+     * 获取所有删除标记
+     * @returns {Promise<object[]>}
+     */
+    getDeletions() {
+      return db.getAll('deletions');
+    },
+
+    /**
+     * 删除一条删除标记
+     * @param {number} id
+     * @returns {Promise<void>}
+     */
+    clearDeletion(id) {
+      return db.delete('deletions', id);
+    },
+
+    /**
+     * 清除指定资源的所有删除标记
+     * @param {string} resource
+     * @returns {Promise<void>}
+     */
+    clearDeletionsByResource(resource) {
+      return db._getDb().then(function (database) {
+        return new Promise(function (resolve, reject) {
+          const tx = database.transaction('deletions', 'readwrite');
+          const store = tx.objectStore('deletions');
+          const index = store.index('by_resource');
+          const req = index.getAll(resource);
+          req.onsuccess = function () {
+            const items = req.result;
+            let completed = 0;
+            if (items.length === 0) { resolve(); return; }
+            items.forEach(function (it) {
+              const delReq = store.delete(it.id);
+              delReq.onsuccess = function () {
+                completed++;
+                if (completed === items.length) resolve();
+              };
+              delReq.onerror = function () { reject(delReq.error); };
+            });
+          };
+          req.onerror = function () { reject(req.error); };
         });
       });
     },

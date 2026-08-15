@@ -22,6 +22,11 @@
       port: 'teacher',
       title: '班级学情总览'
     },
+    '#/teacher/messages': {
+      page: 'messages',
+      port: 'teacher',
+      title: '家校沟通'
+    },
     
     // 学生端
     '#/student/photo-qa': {
@@ -138,12 +143,35 @@
 
   /**
    * 加载页面内容
+   * 优先使用内嵌模板（支持file://协议），回退到fetch（HTTP服务器）
    */
   function loadPage(route) {
     const mainContent = document.getElementById('main-content');
     if (!mainContent) return;
     
-    // 构建页面路径
+    // 显示加载状态
+    mainContent.innerHTML = '<div class="loading-container"><div class="spinner"></div><div>加载中...</div></div>';
+    
+    // 优先从内嵌模板加载（支持file://直接打开）
+    function renderTemplate(html) {
+      mainContent.innerHTML = html;
+      // 触发页面初始化事件
+      const event = new CustomEvent('page-loaded', {
+        detail: { route: route }
+      });
+      document.dispatchEvent(event);
+    }
+    
+    // 尝试从内嵌模板获取
+    if (window.PageTemplates && window.PageTemplates[route.page]) {
+      // 使用setTimeout确保DOM更新（显示加载状态）
+      setTimeout(function() {
+        renderTemplate(window.PageTemplates[route.page]);
+      }, 50);
+      return;
+    }
+    
+    // 回退：通过fetch加载（HTTP服务器环境）
     let pagePath;
     if (route.port === 'settings') {
       pagePath = `pages/${route.page}.html`;
@@ -151,10 +179,6 @@
       pagePath = `pages/${route.port}/${route.page}.html`;
     }
     
-    // 显示加载状态
-    mainContent.innerHTML = '<div class="loading-container"><div class="spinner"></div><div>加载中...</div></div>';
-    
-    // 加载页面内容
     fetch(pagePath)
       .then(response => {
         if (!response.ok) {
@@ -163,13 +187,7 @@
         return response.text();
       })
       .then(html => {
-        mainContent.innerHTML = html;
-        
-        // 触发页面初始化事件
-        const event = new CustomEvent('page-loaded', { 
-          detail: { route: route } 
-        });
-        document.dispatchEvent(event);
+        renderTemplate(html);
       })
       .catch(error => {
         console.error('加载页面失败:', error);

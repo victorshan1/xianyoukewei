@@ -1,0 +1,16 @@
+{
+  "navigationBar": {
+    "visible": true,
+    "title": "首页",
+    "backgroundColor": "#ffffff",
+    "foregroundColor": "#000000"
+  },
+  "orientation": "portrait",
+  "artifact": {
+    "id": "",
+    "title": "应用标题",
+    "versionDescription": "版本说明",
+    "shareDescription": "分享描述",
+    "coverImage": "public/cover.png"
+  }
+}

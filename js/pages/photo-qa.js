@@ -14,6 +14,8 @@
     currentImage: null,
     // 当前图片的base64
     currentImageBase64: null,
+    // 压缩后的图片base64（低体积，用于提交与存储）
+    compressedImageBase64: null,
     // 语音识别相关
     recognition: null,
     isRecording: false,
@@ -155,18 +157,29 @@
 
       this.currentImage = file;
 
-      // 读取文件并显示预览
+      // 读取文件 → 压缩 → 显示预览并保存 base64
       const reader = new FileReader();
-      reader.onload = (e) => {
-        this.currentImageBase64 = e.target.result.split(',')[1]; // 去掉data:image/xxx;base64,前缀
-        
-        // 显示预览
+      reader.onload = async (e) => {
+        const originalDataUrl = e.target.result;
+        try {
+          // 前端压缩，降低上传体积与 token 消耗，节省费用
+          const compressedDataUrl = await this.compressImage(originalDataUrl);
+          this.currentImageBase64 = compressedDataUrl.split(',')[1]; // 去掉data:image/xxx;base64,前缀
+          if (!this.currentImageBase64) this.currentImageBase64 = originalDataUrl.split(',')[1];
+          this.compressedImageBase64 = compressedDataUrl;
+        } catch (err) {
+          // 压缩失败时回退到原图
+          console.warn('图片压缩失败，使用原图:', err);
+          this.currentImageBase64 = originalDataUrl.split(',')[1];
+        }
+
+        // 显示预览（用压缩后的图，加载更快）
         const preview = document.getElementById('image-preview');
         const previewImg = document.getElementById('preview-image');
         const uploadArea = document.getElementById('image-upload-area');
         
         if (preview && previewImg && uploadArea) {
-          previewImg.src = e.target.result;
+          previewImg.src = this.compressedImageBase64 || originalDataUrl;
           preview.classList.remove('hidden');
           uploadArea.classList.add('hidden');
         }
@@ -175,11 +188,48 @@
     },
 
     /**
+     * 压缩图片：等比缩放到最长边不超过 MAX_EDGE，以 JPEG 输出，降低体积
+     * @param {string} dataUrl - 原图 data URL
+     * @returns {Promise<string>} 压缩后的 data URL
+     */
+    compressImage(dataUrl, maxEdge = 1568, quality = 0.8) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+          try {
+            let { width, height } = img;
+            // 等比缩放，长边不超过 maxEdge
+            if (Math.max(width, height) > maxEdge) {
+              const ratio = maxEdge / Math.max(width, height);
+              width = Math.round(width * ratio);
+              height = Math.round(height * ratio);
+            }
+
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+
+            // JPEG 输出，白底填充（透明 PNG 转 JPEG 时避免黑底）
+            const out = canvas.toDataURL('image/jpeg', quality);
+            resolve(out);
+          } catch (err) {
+            reject(err);
+          }
+        };
+        img.onerror = () => reject(new Error('图片加载失败'));
+        img.src = dataUrl;
+      });
+    },
+
+    /**
      * 移除图片
      */
     removeImage() {
       this.currentImage = null;
       this.currentImageBase64 = null;
+      this.compressedImageBase64 = null;
 
       const preview = document.getElementById('image-preview');
       const uploadArea = document.getElementById('image-upload-area');
@@ -496,7 +546,8 @@
           
           await App.Storage.db.add('qa_records', {
             studentId: studentId,
-            imageUrl: this.currentImageBase64 ? 'data:image/jpeg;base64,' + this.currentImageBase64 : '',
+            // 优先存压缩后的图，减小存储体积
+            imageUrl: this.compressedImageBase64 || (this.currentImageBase64 ? 'data:image/jpeg;base64,' + this.currentImageBase64 : ''),
             question: result.question || '',
             answer: result.answer || '',
             steps: result.steps || '',

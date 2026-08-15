@@ -3,9 +3,9 @@
  * 功能：离线缓存、资源预加载、离线提示
  */
 
-const CACHE_NAME = 'rural-ai-cache-v1';
-const STATIC_CACHE = 'rural-ai-static-v1';
-const API_CACHE = 'rural-ai-api-v1';
+const CACHE_NAME = 'rural-ai-cache-v2';
+const STATIC_CACHE = 'rural-ai-static-v2';
+const API_CACHE = 'rural-ai-api-v2';
 
 // 需要缓存的静态资源
 const STATIC_ASSETS = [
@@ -18,6 +18,9 @@ const STATIC_ASSETS = [
   '/js/api.js',
   '/js/demo-data.js',
   '/js/echarts-helper.js',
+  '/js/cloud.js',
+  '/js/sync.js',
+  '/js/page-templates.js',
   '/js/pages/lesson-plan.js',
   '/js/pages/student-profile.js',
   '/js/pages/class-overview.js',
@@ -25,6 +28,9 @@ const STATIC_ASSETS = [
   '/js/pages/wrong-book.js',
   '/js/pages/photo-qa.js',
   '/js/pages/report.js',
+  '/js/pages/communication.js',
+  '/js/pages/messages.js',
+  '/js/pages/settings.js',
   '/pages/teacher/lesson-plan.html',
   '/pages/teacher/student-profile.html',
   '/pages/teacher/class-overview.html',

@@ -9,10 +9,17 @@
 
   /**
    * 注册 Service Worker（离线支持）
+   * 注意：file:// 协议下不支持 Service Worker，自动跳过
    */
   function registerServiceWorker() {
+    // file:// 协议下不注册 Service Worker
+    if (window.location.protocol === 'file:') {
+      console.log('[App] file:// 协议，跳过 Service Worker 注册');
+      return;
+    }
+
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js')
+      navigator.serviceWorker.register('sw.js')
         .then((registration) => {
           console.log('[App] Service Worker 注册成功:', registration.scope);
 
@@ -106,9 +113,24 @@
   }
 
   /**
+   * 恢复云登录态
+   * 已登录时向后端校验 token 并刷新用户信息（离线时静默跳过）
+   */
+  function restoreCloudSession() {
+    if (!window.App.Cloud || !window.App.Cloud.isLoggedIn()) return;
+    window.App.Cloud.me().catch(function () {
+      // token 失效或后端未启动时静默处理，登录态由 Cloud 模块自动清除
+      console.log('[App] 云端会话校验未通过，保持离线模式');
+    });
+  }
+
+  /**
    * 初始化应用
    */
   function initApp() {
+    // 恢复云端登录态
+    restoreCloudSession();
+
     // 注册 Service Worker
     registerServiceWorker();
 
@@ -160,7 +182,8 @@
           'practice': 'Practice',
           'wrong-book': 'WrongBook',
           'report': 'Report',
-          'communication': 'Communication'
+          'communication': 'Communication',
+          'messages': 'Messages'
         };
         const pageName = pageMap[route.page];
         if (pageName && window.App.Pages[pageName] && window.App.Pages[pageName].init) {

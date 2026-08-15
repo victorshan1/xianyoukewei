@@ -1,0 +1,24 @@
+{
+  "name": "rural-ai-backend",
+  "version": "0.1.0",
+  "description": "乡村课堂AI助教平台 - 后端服务",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "test": "npm run test:unit && npm run test:integration",
+    "test:unit": "node --test test/*.test.mjs",
+    "test:integration": "node scripts/test.mjs",
+    "test:coverage": "node --test --experimental-test-coverage test/*.test.mjs",
+    "test:all": "npm run test && npm run test:coverage",
+    "backup": "node scripts/backup-db.mjs",
+    "restore": "node scripts/backup-db.mjs --restore"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "express": "^4.22.2"
+  }
+}

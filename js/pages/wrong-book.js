@@ -285,7 +285,13 @@
 
       const Storage = window.App.Storage;
       try {
-        await Storage.db.delete('wrong_answers', id);
+        const record = this.allWrongAnswers.find(w => w.id === id);
+        // 若同步层可用，记录删除标记供云端反向删除
+        if (App.Sync && App.Sync.removeLocal && record) {
+          await App.Sync.removeLocal('wrong_answers', record);
+        } else {
+          await Storage.db.delete('wrong_answers', id);
+        }
         this.allWrongAnswers = this.allWrongAnswers.filter(w => w.id !== id);
         this.updateStats();
         this.renderList();

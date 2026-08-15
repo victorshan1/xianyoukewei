@@ -142,7 +142,7 @@
       // 检查API Key
       const apiKey = (App.Storage && App.Storage.config) ? App.Storage.config.getApiKey() : null;
       if (!apiKey) {
-        this.showToast('请先在设置页面配置 API Key', 'warning');
+        this.showErrorResult('未配置 API Key', '请点击右上角 ⚙️ 设置按钮，配置您的 API Key 后再试。');
         return;
       }
 
@@ -171,10 +171,90 @@
         this.showToast('教案生成成功！', 'success');
       } catch (error) {
         console.error('生成教案失败:', error);
-        this.showToast(error.message || '生成失败，请重试', 'error');
+        const errInfo = this.getErrorMessage(error);
+        this.showErrorResult(errInfo.title, errInfo.message, error);
+        this.showToast(errInfo.title, 'error');
       } finally {
         this.showLoading(false);
       }
+    },
+
+    /**
+     * 获取友好的错误信息
+     */
+    getErrorMessage(error) {
+      const type = error.type || '';
+      const msg = error.message || '';
+
+      if (type === 'auth' || msg.includes('API Key')) {
+        return {
+          title: 'API Key 配置错误',
+          message: '请检查设置页面中的 API Key 是否正确。点击右上角 ⚙️ 图标进入设置。'
+        };
+      }
+      if (type === 'timeout' || msg.includes('超时') || msg.includes('abort')) {
+        return {
+          title: '请求超时',
+          message: 'AI 服务响应超时，请检查网络连接后重试。如果使用的是国外API，可能需要科学上网。'
+        };
+      }
+      if (type === 'network' || msg.includes('Failed to fetch') || msg.includes('NetworkError') || msg.includes('网络')) {
+        return {
+          title: '网络连接失败',
+          message: '无法连接到 AI 服务。可能原因：\n1. 网络未连接\n2. API 地址不正确\n3. 浏览器跨域(CORS)限制 — 请尝试用本地服务器打开（如 python -m http.server）\n4. API 服务商不支持浏览器直接调用'
+        };
+      }
+      if (type === 'api' || msg.includes('401') || msg.includes('Unauthorized')) {
+        return {
+          title: 'API 认证失败',
+          message: 'API Key 无效或已过期，请检查设置页面中的 API Key 是否正确。'
+        };
+      }
+      if (msg.includes('429') || msg.includes('rate limit')) {
+        return {
+          title: '请求过于频繁',
+          message: 'API 调用频率超限，请稍后再试。'
+        };
+      }
+      if (msg.includes('CORS') || msg.includes('cross-origin')) {
+        return {
+          title: '跨域请求被阻止',
+          message: '浏览器安全策略阻止了直接调用 API。请使用本地服务器打开项目：\n在项目目录运行 python -m http.server 8080，然后访问 http://localhost:8080'
+        };
+      }
+      return {
+        title: '生成失败',
+        message: msg || '请检查网络和API配置后重试。'
+      };
+    },
+
+    /**
+     * 在结果区域显示错误信息
+     */
+    showErrorResult(title, message, error) {
+      const resultDiv = document.getElementById('lesson-plan-result');
+      const planContent = document.getElementById('plan-content');
+
+      if (!resultDiv || !planContent) return;
+
+      planContent.innerHTML = `
+        <div style="text-align: center; padding: 40px 20px;">
+          <div style="font-size: 48px; margin-bottom: 16px;">⚠️</div>
+          <h3 style="color: #EF4444; font-size: 18px; margin-bottom: 12px;">${title}</h3>
+          <div style="color: #6B7280; font-size: 14px; line-height: 1.8; white-space: pre-line; text-align: left; max-width: 500px; margin: 0 auto; background: #FEF2F2; padding: 16px; border-radius: 8px; border-left: 4px solid #EF4444;">
+            ${message}
+          </div>
+          ${error && error.message ? `<details style="margin-top: 16px; text-align: left; max-width: 500px; margin-left: auto; margin-right: auto;">
+            <summary style="cursor: pointer; color: #9CA3AF; font-size: 12px;">技术详情</summary>
+            <pre style="background: #F3F4F6; padding: 12px; border-radius: 6px; font-size: 11px; overflow-x: auto; margin-top: 8px; color: #6B7280;">${error.message}</pre>
+          </details>` : ''}
+          <button onclick="App.Pages.LessonPlan.handleGenerate()" style="margin-top: 20px; padding: 10px 24px; background: linear-gradient(135deg, #FF6B35, #FF8C42); color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer;">
+            <i class="fas fa-redo"></i> 重新尝试
+          </button>
+        </div>
+      `;
+      resultDiv.classList.remove('hidden');
+      resultDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
     },
 
     /**

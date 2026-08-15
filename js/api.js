@@ -72,12 +72,15 @@
         this.callbacks.onStart();
       }
 
+      const url = `${this.baseURL}${endpoint}`;
+      console.log(`[API] 请求: ${url}`, { model: body.model, baseURL: this.baseURL });
+
       try {
         // 创建 AbortController 用于超时控制
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), timeout);
 
-        const response = await fetch(`${this.baseURL}${endpoint}`, {
+        const response = await fetch(url, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -89,17 +92,22 @@
 
         clearTimeout(timeoutId);
 
+        console.log(`[API] 响应状态: ${response.status} ${response.statusText}`);
+
         // 解析响应
         const data = await response.json();
 
         // 检查 API 错误
         if (!response.ok) {
-          const error = new Error(data.error?.message || 'API 请求失败');
+          const error = new Error(data.error?.message || data.message || `API 请求失败 (${response.status})`);
           error.type = 'api';
           error.statusCode = response.status;
-          error.details = data.error;
+          error.details = data.error || data;
+          console.error('[API] 请求失败:', error.message, data);
           throw error;
         }
+
+        console.log('[API] 请求成功');
 
         // 调用成功回调
         if (this.callbacks.onSuccess) {
@@ -112,15 +120,23 @@
         // 区分错误类型
         if (error.name === 'AbortError') {
           error.type = 'timeout';
-          error.message = '请求超时，请重试';
+          error.message = '请求超时（30秒），请检查网络或稍后重试';
+          console.error('[API] 请求超时');
         } else if (error.type === 'auth') {
           // API Key 未配置，保持原样
+          console.error('[API] 认证错误:', error.message);
         } else if (error.type === 'api') {
           // API 错误，保持原样
+          console.error('[API] API错误:', error.message);
+        } else if (error.message && error.message.includes('Failed to fetch')) {
+          error.type = 'network';
+          error.message = '无法连接到API服务器。可能原因：网络不通、API地址错误、或浏览器跨域(CORS)限制。';
+          console.error('[API] 网络错误（可能是CORS限制）:', error);
         } else {
           // 网络错误
           error.type = 'network';
-          error.message = '网络连接失败，请检查网络后重试';
+          error.message = '网络连接失败：' + (error.message || '未知错误');
+          console.error('[API] 网络错误:', error);
         }
 
         // 调用错误回调

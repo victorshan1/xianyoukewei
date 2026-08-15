@@ -1,0 +1,188 @@
+{
+  "schemaContractVersion": "lingguang-drizzle-schema-v1",
+  "migrationContractVersion": "lingguang-drizzle-migration-v1",
+  "dialect": "mysql",
+  "toolchain": {
+    "drizzleOrm": "0.45.2",
+    "drizzleKit": "0.31.10",
+    "nodeSqlParser": "5.4.0"
+  },
+  "limits": {
+    "schemaFileCount": 64,
+    "schemaFileBytes": 262144,
+    "schemaTotalBytes": 1048576,
+    "migrationCount": 256,
+    "migrationFileBytes": 262144,
+    "migrationTotalBytes": 4194304,
+    "migrationStatementCount": 64,
+    "historyStatementCount": 1024,
+    "snapshotFileBytes": 4194304,
+    "snapshotTotalBytes": 67108864,
+    "journalBytes": 262144,
+    "tableCount": 32,
+    "columnsPerTable": 100
+  },
+  "fixtures": [
+    {
+      "id": "create-table-basic",
+      "accepted": true,
+      "operation": "CREATE_TABLE",
+      "sql": "CREATE TABLE `notes` (`id` varchar(64) NOT NULL, `title` varchar(255) NOT NULL DEFAULT '', PRIMARY KEY (`id`));",
+      "expected": {
+        "operation": "CREATE_TABLE",
+        "tableName": "notes",
+        "columnName": null,
+        "table": {
+          "name": "notes",
+          "columns": [
+            {
+              "position": 0,
+              "name": "id",
+              "type": { "name": "VARCHAR", "length": 64 },
+              "nullable": false,
+              "default": null
+            },
+            {
+              "position": 1,
+              "name": "title",
+              "type": { "name": "VARCHAR", "length": 255 },
+              "nullable": false,
+              "default": { "kind": "STRING", "value": "" }
+            }
+          ],
+          "primaryKey": ["id"]
+        }
+      },
+      "sqliteSetup": []
+    },
+    {
+      "id": "add-column-with-default",
+      "accepted": true,
+      "operation": "ADD_COLUMN",
+      "sql": "ALTER TABLE `notes` ADD `status` varchar(32) NOT NULL DEFAULT 'draft';",
+      "expected": {
+        "operation": "ADD_COLUMN",
+        "tableName": "notes",
+        "columnName": "status",
+        "column": {
+          "position": 0,
+          "name": "status",
+          "type": { "name": "VARCHAR", "length": 32 },
+          "nullable": false,
+          "default": { "kind": "STRING", "value": "draft" }
+        }
+      },
+      "sqliteSetup": [
+        "CREATE TABLE notes (id VARCHAR(64) NOT NULL, PRIMARY KEY (id));"
+      ]
+    },
+    {
+      "id": "reject-drop-column",
+      "accepted": false,
+      "errorCode": "DATABASE_MIGRATION_OPERATION_NOT_SUPPORTED",
+      "sql": "ALTER TABLE `notes` DROP COLUMN `title`;"
+    },
+    {
+      "id": "reject-drop-table",
+      "accepted": false,
+      "errorCode": "DATABASE_MIGRATION_OPERATION_NOT_SUPPORTED",
+      "sql": "DROP TABLE `notes`;"
+    },
+    {
+      "id": "reject-rename-table",
+      "accepted": false,
+      "errorCode": "DATABASE_MIGRATION_OPERATION_NOT_SUPPORTED",
+      "sql": "RENAME TABLE `notes` TO `renamed_notes`;"
+    },
+    {
+      "id": "reject-rename-column",
+      "accepted": false,
+      "errorCode": "DATABASE_MIGRATION_OPERATION_NOT_SUPPORTED",
+      "sql": "ALTER TABLE `notes` RENAME COLUMN `title` TO `renamed_title`;"
+    },
+    {
+      "id": "reject-modify-column",
+      "accepted": false,
+      "errorCode": "DATABASE_MIGRATION_OPERATION_NOT_SUPPORTED",
+      "sql": "ALTER TABLE `notes` MODIFY COLUMN `title` varchar(512);"
+    },
+    {
+      "id": "reject-create-index",
+      "accepted": false,
+      "errorCode": "DATABASE_MIGRATION_OPERATION_NOT_SUPPORTED",
+      "sql": "CREATE INDEX `idx_notes_title` ON `notes` (`title`);"
+    },
+    {
+      "id": "reject-dml",
+      "accepted": false,
+      "errorCode": "DATABASE_MIGRATION_OPERATION_NOT_SUPPORTED",
+      "sql": "INSERT INTO `notes` (`id`) VALUES ('1');"
+    },
+    {
+      "id": "reject-update",
+      "accepted": false,
+      "errorCode": "DATABASE_MIGRATION_OPERATION_NOT_SUPPORTED",
+      "sql": "UPDATE `notes` SET `title` = 'changed';"
+    },
+    {
+      "id": "reject-delete",
+      "accepted": false,
+      "errorCode": "DATABASE_MIGRATION_OPERATION_NOT_SUPPORTED",
+      "sql": "DELETE FROM `notes`;"
+    },
+    {
+      "id": "reject-function-default",
+      "accepted": false,
+      "errorCode": "DATABASE_SCHEMA_CONTRACT_REJECTED",
+      "sql": "CREATE TABLE `notes` (`id` varchar(64) NOT NULL, `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (`id`));"
+    },
+    {
+      "id": "reject-column-comment",
+      "accepted": false,
+      "errorCode": "DATABASE_SCHEMA_CONTRACT_REJECTED",
+      "sql": "CREATE TABLE `notes` (`id` varchar(64) NOT NULL COMMENT 'secret', PRIMARY KEY (`id`));"
+    },
+    {
+      "id": "reject-column-collation",
+      "accepted": false,
+      "errorCode": "DATABASE_SCHEMA_CONTRACT_REJECTED",
+      "sql": "CREATE TABLE `notes` (`id` varchar(64) NOT NULL COLLATE utf8mb4_bin, PRIMARY KEY (`id`));"
+    },
+    {
+      "id": "reject-auto-increment",
+      "accepted": false,
+      "errorCode": "DATABASE_SCHEMA_CONTRACT_REJECTED",
+      "sql": "CREATE TABLE `notes` (`id` bigint NOT NULL AUTO_INCREMENT, PRIMARY KEY (`id`));"
+    },
+    {
+      "id": "reject-unsupported-type",
+      "accepted": false,
+      "errorCode": "DATABASE_SCHEMA_CONTRACT_REJECTED",
+      "sql": "CREATE TABLE `notes` (`id` varchar(64) NOT NULL, `body` text, PRIMARY KEY (`id`));"
+    },
+    {
+      "id": "reject-add-column-without-default",
+      "accepted": false,
+      "errorCode": "DATABASE_SCHEMA_CONTRACT_REJECTED",
+      "sql": "ALTER TABLE `notes` ADD `status` varchar(32) NOT NULL;"
+    },
+    {
+      "id": "reject-multiple-add-columns",
+      "accepted": false,
+      "errorCode": "DATABASE_MIGRATION_OPERATION_NOT_SUPPORTED",
+      "sql": "ALTER TABLE `notes` ADD `status` varchar(32) NOT NULL DEFAULT 'draft', ADD `note` varchar(255) NOT NULL DEFAULT '';"
+    },
+    {
+      "id": "reject-reserved-column",
+      "accepted": false,
+      "errorCode": "DATABASE_SCHEMA_CONTRACT_REJECTED",
+      "sql": "CREATE TABLE `notes` (`id` varchar(64) NOT NULL, `artifact_id` varchar(64), PRIMARY KEY (`id`));"
+    },
+    {
+      "id": "reject-role-table",
+      "accepted": false,
+      "errorCode": "DATABASE_SCHEMA_CONTRACT_REJECTED",
+      "sql": "CREATE TABLE `roles` (`id` varchar(64) NOT NULL, PRIMARY KEY (`id`));"
+    }
+  ]
+}

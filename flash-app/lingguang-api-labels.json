@@ -1,0 +1,92 @@
+{
+    "lingguang.asr.start": {
+        "api": "lingguang.asr",
+        "label": "麦克风",
+        "icon": ""
+    },
+    "lingguang.chooseFile": {
+        "api": "lingguang.file",
+        "label": "读取文件",
+        "icon": ""
+    },
+    "lingguang.fs.getFileText": {
+        "api": "lingguang.file",
+        "label": "读取文件",
+        "icon": ""
+    },
+    "lingguang.fs.parseFileText": {
+        "api": "lingguang.file",
+        "label": "读取文件",
+        "icon": ""
+    },
+    "lingguang.chooseImage": {
+        "api": "lingguang.album",
+        "label": "相册",
+        "icon": ""
+    },
+    "lingguang.getLocation": {
+        "api": "lingguang.getLocation",
+        "label": "地理位置",
+        "icon": ""
+    },
+    "lingguang.scanCode": {
+        "api": "lingguang.scanCode",
+        "label": "相机",
+        "icon": ""
+    },
+    "lingguang.mediaDevices.getUserMedia": {
+        "api": "lingguang.mediaDevices.getUserMedia",
+        "label": "麦克风与摄像头",
+        "icon": ""
+    },
+    "lingguang.gyroscope.start": {
+        "api": "lingguang.sensor",
+        "label": "传感器",
+        "icon": ""
+    },
+    "lingguang.readFile": {
+        "api": "lingguang.file",
+        "label": "读取文件",
+        "icon": ""
+    },
+    "lingguang.saveFile": {
+        "api": "lingguang.file",
+        "label": "读取文件",
+        "icon": ""
+    },
+    "lingguang.saveImageToPhotosAlbum": {
+        "api": "lingguang.album",
+        "label": "相册",
+        "icon": ""
+    },
+    "lingguang.startAccelerometer": {
+        "api": "lingguang.sensor",
+        "label": "传感器",
+        "icon": ""
+    },
+    "lingguang.startCompass": {
+        "api": "lingguang.sensor",
+        "label": "传感器",
+        "icon": ""
+    },
+    "lingguang.startDeviceMotionListening": {
+        "api": "lingguang.sensor",
+        "label": "传感器",
+        "icon": ""
+    },
+    "lingguang.takePhoto": {
+        "api": "lingguang.takePhoto",
+        "label": "相机",
+        "icon": ""
+    },
+    "lingguang.uploadFile": {
+        "api": "lingguang.uploadFile",
+        "label": "文件",
+        "icon": ""
+    },
+    "lingguang.uploadImage": {
+        "api": "lingguang.album",
+        "label": "相册",
+        "icon": ""
+    }
+}

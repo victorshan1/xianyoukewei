@@ -922,6 +922,17 @@
     },
 
     /**
+     * 本地删除记录；若同步层可用则同时记录删除标记，供云端反向删除
+     */
+    async deleteLocal(storeName, record) {
+      if (App.Sync && App.Sync.removeLocal) {
+        await App.Sync.removeLocal(storeName, record);
+      } else if (record && record.id !== undefined) {
+        await App.Storage.db.delete(storeName, record.id);
+      }
+    },
+
+    /**
      * 删除学生
      */
     async deleteStudent(studentId) {
@@ -936,19 +947,19 @@
       }
 
       try {
-        // 删除学生记录
-        await App.Storage.db.delete('students', studentId);
-        
+        // 删除学生记录（同步删除云端）
+        await this.deleteLocal('students', student);
+
         // 删除相关的成绩记录
         const scores = await App.Storage.db.getByIndex('scores', 'by_student', studentId);
         for (const score of scores) {
-          await App.Storage.db.delete('scores', score.id);
+          await this.deleteLocal('scores', score);
         }
         
         // 删除相关的画像数据
         const profile = this.profiles.find(p => p.studentId === studentId);
         if (profile) {
-          await App.Storage.db.delete('profiles', profile.id);
+          await this.deleteLocal('profiles', profile);
         }
 
         // 更新本地数据
